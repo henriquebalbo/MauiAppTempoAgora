@@ -13,7 +13,8 @@
         public string? main { get; set; }
         public string? description { get; set; }
         public double? speed { get; set; }
-
+        public string? country { get; set; }
+        public int? timezone { get; set; }
     }
 
 

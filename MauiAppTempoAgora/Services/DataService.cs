@@ -48,7 +48,7 @@ namespace MauiAppTempoAgora.Services
 
 
 
-
+                    
 
 
                     t = new()
@@ -58,7 +58,8 @@ namespace MauiAppTempoAgora.Services
                         description = (string)rascunho["weather"][0]["description"], // pegando a descrição do objeto Json e convertendo para string // [0] posição do array
                         main = (string)rascunho["weather"][0]["main"], // pegando a descrição do objeto Json e convertendo para string  
                         temp = (double)rascunho["main"]["temp"], // pegando a temperatura mínima do objeto Json e convertendo para double
-                        
+                        country = (string)rascunho["sys"]["country"],
+                        timezone = (int)rascunho["timezone"],
                         visibility = (int)rascunho["visibility"], // pegando a visibilidade do objeto Json e convertendo para int
                         speed = (double)rascunho["wind"]["speed"], // pegando a velocidade do vento do objeto Json e convertendo para double
                         sunrise = sunrise.ToString("HH:mm"), // convertendo o horário do nascer do sol para string no formato HH:mm usando o método ToString e passando o formato como parâmetro

@@ -10,13 +10,13 @@
     <ScrollView>
         <Frame
            WidthRequest="350"
-           HeightRequest="400"
+           HeightRequest="410"
            HorizontalOptions="Center"
            BackgroundColor="White"
            CornerRadius="10">
             
             <VerticalStackLayout
-            Padding="8,0"
+            Padding="7,0"
             Spacing="10"
             WidthRequest="300"
             HorizontalOptions="Center">

@@ -8,6 +8,7 @@ namespace MauiAppTempoAgora
     public partial class MainPage : ContentPage
     {
         int count = 0;
+        private object tempo;
 
         public MainPage()
         {
@@ -27,15 +28,42 @@ namespace MauiAppTempoAgora
                     if (t != null)
                     {
 
+                        string Visibilidade;
+
+                        if (t.visibility >= 10000)
+                        {
+                            Visibilidade = "Normal";
+                        }
+                        else if (t.visibility > 5000)
+                        {
+                            Visibilidade = "Ruim";
+                        }
+                        else
+                        {
+                            Visibilidade = "Reduzida";
+                        }
+
+                        DateTime horaUtc = DateTime.UtcNow;
+                       // DateTime sunriseUtc = DateTime.UtcNow;
+                       // DateTime sunsetUtc = DateTime.UtcNow;
+
+                        DateTime horaLocal = horaUtc.AddSeconds((int)t.timezone);
+                       // DateTime sunrise = sunriseUtc.AddSeconds((int)t.timezone);
+                       // DateTime sunset= sunsetUtc.AddSeconds((int)t.timezone);
+
                         string dados_previsao = "";
 
-                        dados_previsao = $"Cidade: {txt_cidade.Text} \n" +
-                                         $"Data: {DateTime.Now} \n" +
+                        dados_previsao = $"Cidade: {txt_cidade.Text} / {t.country} \n" +
+                                         $"Data: {horaLocal:dd/MM/yyyy HH:mm} \n" +
                                          $"Latitude: {t.lat} \n" +
                                          $"Longitude: {t.lon} \n" +
                                          $"Nascer do Sol: {t.sunrise} \n" +
+                                       //  $"Nascer do Sol: {sunrise:dd/MM/yyyy HH:mm} \n" +
                                          $"Por do Sol: {t.sunset} \n" +
+                                       //  $"Por do Sol: {sunset:dd/MM/yyyy HH:mm} \n" +
                                          $"Temperatura: {t.temp} \n" +
+                                         $"Visibilidade: {Visibilidade} \n" +
+                                         $"Velocidade do Vento: {t.speed} \n" +
                                          $"Céu Agora: {t.description} \n";
 
                         resultado.Text = dados_previsao; // exibindo os dados da previsão do tempo na interface do usuário, formatados como uma string
