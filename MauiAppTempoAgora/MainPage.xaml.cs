@@ -1,5 +1,10 @@
-﻿namespace MauiAppTempoAgora
+﻿using MauiAppTempoAgora.Models;
+using MauiAppTempoAgora.Services;
+using System.Threading.Tasks;
+
+namespace MauiAppTempoAgora
 {
+
     public partial class MainPage : ContentPage
     {
         int count = 0;
@@ -9,17 +14,62 @@
             InitializeComponent();
         }
 
-        private void OnCounterClicked(object sender, EventArgs e)
+
+        private async void Button_Clicked(object sender, EventArgs e)
         {
-            count++;
+            try
+            {
+                if (!string.IsNullOrEmpty(txt_cidade.Text)) // verificando se o campo de entrada da cidade não está vazio ou nulo
+                {
 
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
-            else
-                CounterBtn.Text = $"Clicked {count} times";
+                    Tempo? t = await DataService.GetPrevisao(txt_cidade.Text); // chamando o método Getprevisão da classe ApiTempo para obter os dados do tempo com base na cidade fornecida
 
-            SemanticScreenReader.Announce(CounterBtn.Text);
+                    if (t != null)
+                    {
+
+                        string dados_previsao = "";
+
+                        dados_previsao = $"Cidade: {txt_cidade.Text} \n" +
+                                         $"Data: {DateTime.Now} \n" +
+                                         $"Latitude: {t.lat} \n" +
+                                         $"Longitude: {t.lon} \n" +
+                                         $"Nascer do Sol: {t.sunrise} \n" +
+                                         $"Por do Sol: {t.sunset} \n" +
+                                         $"Temperatura: {t.temp} \n" +
+                                         $"Céu Agora: {t.description} \n";
+
+                        resultado.Text = dados_previsao; // exibindo os dados da previsão do tempo na interface do usuário, formatados como uma string
+
+                    }
+                    else
+
+                    {
+                        resultado.Text = "Sem Previsão para esta cidade!"; // mensagem de erro caso a resposta da API seja nula, indicando que não há dados disponíveis para a cidade fornecida
+                    }
+
+
+
+                }
+                else
+                {
+                    resultado.Text = "Digite o nome da cidade!"; // mensagem de erro caso o campo de entrada da cidade esteja vazio ou nulo
+
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                await DisplayAlert("Erro", ex.Message, "OK");
+
+
+            }
+        }
+
+        private void Button_Clicked_1(object sender, EventArgs e)
+        {
+            txt_cidade.Text = string.Empty;   // limpa o campo de texto
+            resultado.Text = string.Empty; // limpa o resultado exibido no label
         }
     }
-
 }
