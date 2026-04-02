@@ -1,6 +1,5 @@
 ﻿using MauiAppTempoAgora.Models;
 using MauiAppTempoAgora.Services;
-using System.Threading.Tasks;
 
 namespace MauiAppTempoAgora
 {
@@ -51,6 +50,10 @@ namespace MauiAppTempoAgora
                        // DateTime sunrise = sunriseUtc.AddSeconds((int)t.timezone);
                        // DateTime sunset= sunsetUtc.AddSeconds((int)t.timezone);
 
+
+
+
+
                         string dados_previsao = "";
 
                         dados_previsao = $"Cidade: {txt_cidade.Text} / {t.country} \n" +
@@ -72,7 +75,7 @@ namespace MauiAppTempoAgora
                     else
 
                     {
-                        resultado.Text = "Sem Previsão para esta cidade!"; // mensagem de erro caso a resposta da API seja nula, indicando que não há dados disponíveis para a cidade fornecida
+                        await DisplayAlert("Aviso", "Cidade não encontrada! Verifique o nome digitado.", "OK"); //// mensagem de erro caso a resposta da API seja nula, indicando que não há dados disponíveis para a cidade fornecida
                     }
 
 
@@ -80,7 +83,7 @@ namespace MauiAppTempoAgora
                 }
                 else
                 {
-                    resultado.Text = "Digite o nome da cidade!"; // mensagem de erro caso o campo de entrada da cidade esteja vazio ou nulo
+                    await DisplayAlert("Atenção", "Digite o nome da cidade!", "OK"); //// mensagem de erro caso o campo de entrada da cidade esteja vazio ou nulo
 
                 }
 
@@ -88,7 +91,19 @@ namespace MauiAppTempoAgora
 
             catch (Exception ex)
             {
-                await DisplayAlert("Erro", ex.Message, "OK");
+                if (ex.Message.Contains("404"))
+                {
+                    await DisplayAlert("Erro", "Cidade não encontrada!", "OK");
+                }
+                else
+                {
+                    await DisplayAlert("Erro", "Erro ao buscar previsão do tempo.", "OK");
+                }
+
+
+
+
+
 
 
             }
