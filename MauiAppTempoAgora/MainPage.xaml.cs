@@ -22,14 +22,19 @@ namespace MauiAppTempoAgora
                 if (!string.IsNullOrEmpty(txt_cidade.Text)) // verificando se o campo de entrada da cidade não está vazio ou nulo
                 {
 
-                    Tempo? t = await DataService.GetPrevisao(txt_cidade.Text); // chamando o método Getprevisão da classe ApiTempo para obter os dados do tempo com base na cidade fornecida
+                    Tempo? t = await DataService.GetPrevisao(txt_cidade.Text); // chamando o método Getprevisão da classe ApiTempo para
+                                                                               // obter os dados do tempo com base na cidade fornecida
 
                     if (t != null)
                     {
+                        // *** Solicitado na Agenda 07
 
-                        string Visibilidade;
+                        string Visibilidade; // criando a variavel para armazenar a descrição da visibilidade
+                                             // com base no valor retornado pela API
 
-                        if (t.visibility >= 10000)
+                        if (t.visibility >= 10000) // Explicando: 10000 metros ou mais é considerado "Normal",
+                                                   // entre 5000 e 9999 metros é considerado "Ruim" e
+                                                   // abaixo de 5000 metros é considerado "Reduzida"
                         {
                             Visibilidade = "Normal";
                         }
@@ -42,56 +47,46 @@ namespace MauiAppTempoAgora
                             Visibilidade = "Reduzida";
                         }
 
-                        DateTime horaUtc = DateTime.UtcNow;
-                       // DateTime sunriseUtc = DateTime.UtcNow;
-                       // DateTime sunsetUtc = DateTime.UtcNow;
-
-                        DateTime horaLocal = horaUtc.AddSeconds((int)t.timezone);
-                       // DateTime sunrise = sunriseUtc.AddSeconds((int)t.timezone);
-                       // DateTime sunset= sunsetUtc.AddSeconds((int)t.timezone);
+                        DateTime horaUtc = DateTime.UtcNow; // obtendo a hora atual em UTC (Tempo Universal Coordenado)
+                        DateTime horaLocal = horaUtc.AddSeconds((int)t.timezone); // convertendo a hora UTC para a hora local da cidade,
+                                                                                  // adicionando o deslocamento de fuso horário retornado
+                                                                                  // pela API (t.timezone) em segundos
 
 
-
-
-
-                        string dados_previsao = "";
+                        string dados_previsao = ""; // criando a variavel para armazenar os dados da previsão do tempo, formatados como uma string
 
                         dados_previsao = $"Cidade: {txt_cidade.Text} / {t.country} \n" +
                                          $"Data: {horaLocal:dd/MM/yyyy HH:mm} \n" +
                                          $"Latitude: {t.lat} \n" +
                                          $"Longitude: {t.lon} \n" +
                                          $"Nascer do Sol: {t.sunrise} \n" +
-                                       //  $"Nascer do Sol: {sunrise:dd/MM/yyyy HH:mm} \n" +
                                          $"Por do Sol: {t.sunset} \n" +
-                                       //  $"Por do Sol: {sunset:dd/MM/yyyy HH:mm} \n" +
                                          $"Temperatura: {t.temp} \n" +
-                                         $"Visibilidade: {Visibilidade} \n" +
-                                         $"Velocidade do Vento: {t.speed} \n" +
-                                         $"Céu Agora: {t.description} \n";
+                                         $"Visibilidade: {Visibilidade} \n" + // Agenda 07
+                                         $"Velocidade do Vento: {t.speed} \n" + // Agenda 07
+                                         $"Céu Agora: {t.description} \n"; // Agenda 07
 
-                        resultado.Text = dados_previsao; // exibindo os dados da previsão do tempo na interface do usuário, formatados como uma string
+                        resultado.Text = dados_previsao; // exibindo os dados da previsão do tempo 
 
-                    }
-                    else
+                    } // *** Agenda 07 - Melhorias no tratamento de erros
+                    else 
 
                     {
-                        await DisplayAlert("Aviso", "Cidade não encontrada! Verifique o nome digitado.", "OK"); //// mensagem de erro caso a resposta da API seja nula, indicando que não há dados disponíveis para a cidade fornecida
+                        await DisplayAlert("Aviso", "Cidade não encontrada! Verifique o nome digitado.", "OK"); // mensagem de erro caso a cidade
+                                                                                                                // não seja encontrada 
                     }
-
-
-
                 }
                 else
                 {
-                    await DisplayAlert("Atenção", "Digite o nome da cidade!", "OK"); //// mensagem de erro caso o campo de entrada da cidade esteja vazio ou nulo
-
+                    await DisplayAlert("Atenção", "Digite o nome da cidade!", "OK"); // mensagem caso o campo de entrada da cidade
+                                                                                     // esteja vazio ou nulo
                 }
-
             }
 
-            catch (Exception ex)
+            catch (Exception ex) // qualquer exceção que possa ocorrer durante a execução do código,
+                                 // como erros de rede ou problemas com a API
             {
-                if (ex.Message.Contains("404"))
+                if (ex.Message.Contains("404")) // erro 404 indica que a cidade não foi encontrada na API
                 {
                     await DisplayAlert("Erro", "Cidade não encontrada!", "OK");
                 }
@@ -100,16 +95,10 @@ namespace MauiAppTempoAgora
                     await DisplayAlert("Erro", "Erro ao buscar previsão do tempo.", "OK");
                 }
 
-
-
-
-
-
-
-            }
+             }
         }
 
-        private void Button_Clicked_1(object sender, EventArgs e)
+        private void Button_Clicked_1(object sender, EventArgs e) // botão para limpar
         {
             txt_cidade.Text = string.Empty;   // limpa o campo de texto
             resultado.Text = string.Empty; // limpa o resultado exibido no label

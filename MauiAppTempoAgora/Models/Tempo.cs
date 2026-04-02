@@ -7,7 +7,6 @@
         public double? lat { get; set; }
         public int? visibility { get; set; }
         public double? temp { get; set; }
-       
         public string? sunrise { get; set; }
         public string? sunset { get; set; }
         public string? main { get; set; }
