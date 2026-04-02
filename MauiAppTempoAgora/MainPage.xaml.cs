@@ -13,8 +13,6 @@ namespace MauiAppTempoAgora
         {
             InitializeComponent();
         }
-
-
         private async void Button_Clicked(object sender, EventArgs e)
         {
             try

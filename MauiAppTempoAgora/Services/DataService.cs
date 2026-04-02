@@ -20,7 +20,7 @@ namespace MauiAppTempoAgora.Services
                 // Dispara um alerta para o usuário
                 // O Shell.Current.DisplayAlert é uma forma rápida de mostrar avisos
 
-                await Shell.Current.DisplayAlert("Sem Conexão", "Você precisa estar conectado à internet para buscar a previsão!", "OK");
+                await Shell.Current.DisplayAlert("Sem Conexão", "Você precisa estar conectado à Internet para buscar a Previsão!", "OK");
 
                 return null;
             }
